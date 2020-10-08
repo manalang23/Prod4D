@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,6 +13,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button runButton = findViewById(R.id.runButton)
+        Controller eventController = new Controller();
+
+        EditText editText = findViewById(R.id.EditText);
+
+        Button runButton = findViewById(R.id.RunButton);
+        runButton.setOnClickListener(eventController);
     }
 }
