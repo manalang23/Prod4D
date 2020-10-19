@@ -1,6 +1,8 @@
+//@author Audrey Sauter, Aron Manalang, Tony Hayden, Jarren Calizo
 package edu.up.prod4d;
 
 public class Stage {
+
     private boolean drawFromDeck(GameState gameState /* Or Stage stage not sure */) {
         if (gameState.currentPhase.equals(DrawPhase)) {
             return true;

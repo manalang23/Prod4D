@@ -1,3 +1,4 @@
+//@author Audrey Sauter, Aron Manalang, Tony Hayden, Jarren Calizo
 package edu.up.prod4d;
 
 import android.media.audiofx.DynamicsProcessing;
@@ -20,16 +21,16 @@ public class GameState {
 
     private Stage currentPhase;
 
-    public GameState (Cards[] playerCards, Cards[] drawPile, Card discardedCard, int totalOfP1, int totalofP2, int p1Points, int p2Points, boolean turn, Stage currentPhase) {
-        this.playerCards = playerCards;
-        this.drawPile = drawPile;
-        this.discardedCard = discardedCard;
-        this.totalOfP1 = totalOfP1;
-        this.totalofP2 = totalofP2;
-        this.P1Points = P1Points;
-        this.P2Points = P2Points;
-        this.turn = turn;
-        this.currentPhase = currentPhase;
+    public GameState () {
+        this.playerCards = null;
+        this.drawPile = null;
+        this.discardedCard = null;
+        this.totalOfP1 = 0;
+        this.totalofP2 = 0;
+        this.P1Points = 0;
+        this.P2Points = 0;
+        this.turn = true;
+        this.currentPhase = null;
     }
 
     public GameState (GameState gameState) {
