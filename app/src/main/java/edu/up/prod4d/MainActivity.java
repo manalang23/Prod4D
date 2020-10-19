@@ -4,10 +4,11 @@ package edu.up.prod4d;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +22,13 @@ public class MainActivity extends AppCompatActivity {
         Button runButton = findViewById(R.id.RunButton);
         runButton.setOnClickListener(eventController);
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        EditText editText = findViewById(R.id.EditText);
+        editText.setText("");
+        GameState firstInstance = new GameState(null, null, null, 0, 0, 0, 0, true, null);
+        GameState secondInstance = new GameState(firstInstance);
     }
 }
