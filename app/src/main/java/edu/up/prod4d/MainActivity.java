@@ -15,12 +15,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Controller eventController = new Controller();
-
         EditText editText = findViewById(R.id.EditText);
 
         Button runButton = findViewById(R.id.RunButton);
-        runButton.setOnClickListener(eventController);
+        runButton.setOnClickListener(this);
 
     }
 
