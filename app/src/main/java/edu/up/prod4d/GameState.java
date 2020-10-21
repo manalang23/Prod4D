@@ -109,7 +109,9 @@ public class GameState {
         }
     }
 
+
     public String toString(GameState gameState) {
+        int DELETETHIS;
         String returnThis;
         returnThis = "Current phase : " + GameState.currentPhase + "\n";
         //If array.toString doesn't work, this will be a for loop that goes through the array and writes it out.
