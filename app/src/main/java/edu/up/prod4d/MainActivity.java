@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         EditText editText = findViewById(R.id.EditText);
         editText.setText("");
-        GameState firstInstance = new GameState(null, null, null, 0, 0, 0, 0, true, null);
+        GameState firstInstance = new GameState();
         GameState secondInstance = new GameState(firstInstance);
     }
 }
