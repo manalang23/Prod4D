@@ -1,13 +1,11 @@
 //@author Audrey Sauter, Aron Manalang, Tony Hayden, Jarren Calizo
 package edu.up.prod4d;
 
-import android.media.audiofx.DynamicsProcessing;
-
-import java.security.PKCS12Attribute;
-import java.util.Hashtable;
 import java.util.Random;
 
 public class GameState {
+
+    //Instance Variables
     private Card[] startingDeck;
     private Card[] player1Cards;
     private Card[] player2Cards;
@@ -23,20 +21,23 @@ public class GameState {
     //Similar to a toggle, this will be true for P1 and false for P2.
     private boolean turn;
 
-    private Stage currentPhase;
+    private String currentStage;
 
+    //Normal Constructor
     public GameState () {
         this.startingDeck = createStartingDeck();
         this.player1Cards = createPlayerHand();
         this.player2Cards = createPlayerHand();
         this.drawPile = createDrawPile();
         this.discardedCard = createDiscardPile();
+
+        this.currentStage = "endPhase";
+
         this.totalOfP1 = 0;
         this.totalofP2 = 0;
         this.P1Points = 0;
         this.P2Points = 0;
         this.turn = true;
-        this.currentPhase = null;
     }
 
     //Deep Copy Constructor
@@ -55,64 +56,16 @@ public class GameState {
             this.drawPile[i] = new Card(gameState.drawPile[i].getNumber(), gameState.drawPile[i].getSuit());
         }
 
+        //do currentPhase deep copy style later
+
         this.discardedCard = new Card(gameState.discardedCard.getNumber(), gameState.discardedCard.getSuit());
-        this.totalOfP1 = totalOfP1;
-        this.P1Points = P1Points;
-        this.P2Points = P2Points;
-        this.turn = turn;
-        this.currentPhase = currentPhase;
+        this.totalOfP1 = gameState.totalOfP1;
+        this.P1Points = gameState.P1Points;
+        this.P2Points = gameState.P2Points;
+        this.turn = gameState.turn;
     }
 
-    }
-
-    public Card[] createPlayerHand() {
-        Random random = new Random();
-        Card[] returnThis = new Card[10];
-        int handCount = 0;
-
-        while (handCount < 10) {
-            int getThisCard = random.nextInt(52);
-            if (this.startingDeck[getThisCard] != null) {
-                returnThis[handCount] = startingDeck[getThisCard];
-                this.startingDeck[getThisCard]=null;
-                handCount++;
-            }
-        }
-        return returnThis;
-    }
-
-    public Card createDiscardPile() {
-        Card returnMe = null;
-        Random random = new Random();
-
-        while (returnMe == null) {
-            int getThisCard = random.nextInt(52);
-            if (this.startingDeck[getThisCard] != null) {
-                returnMe = startingDeck[getThisCard];
-                startingDeck[getThisCard] = null;
-            }
-        }
-
-        return returnMe;
-    }
-
-    public Card[] createDrawPile() {
-        Random random = new Random();
-        Card[] returnThis = new Card[31];
-        int pileAmount = 0;
-
-        int getThisCard = random.nextInt(52);
-        while (pileAmount < 31) {
-            if (this.startingDeck[getThisCard] != null) {
-                returnThis[pileAmount] = this.startingDeck[getThisCard];
-                this.startingDeck[getThisCard] = null;
-                pileAmount++;
-            }
-        }
-
-        return returnThis;
-    }
-
+    //Our String methods
     public String writeHand(Card[] cardSet) {
         String returnThis = "";
         for (int i = 0 ; i < cardSet.length; i++) {
@@ -125,7 +78,7 @@ public class GameState {
     //@Override
     public String toString(GameState gameState) {
         String returnThis;
-        returnThis = "Current phase : " + gameState.currentPhase + "\n";
+        returnThis = "Current phase : " + gameState.currentStage + "\n";
         //If array.toString doesn't work, this will be a for loop that goes through the array and writes it out.
         returnThis = returnThis + "Current points for both players are, from P1 to P2 : " + gameState.P1Points + "," + gameState.P2Points + "\n";
         if (turn) {
@@ -141,7 +94,10 @@ public class GameState {
         return returnThis;
     }
 
+    //Dealing with Card methods
     public Card[] createStartingDeck() {
+        Card[] startingDeck = new Card[52];
+
         //Hearts
         startingDeck[0] = new Card(1, "Hearts");
         startingDeck[1] = new Card(2, "Hearts");
@@ -201,5 +157,133 @@ public class GameState {
         startingDeck[49] = new Card(11, "Clubs");
         startingDeck[50] = new Card(12, "Clubs");
         startingDeck[51] = new Card(13, "Clubs");
+
+        return startingDeck;
     }
+
+    public Card[] createPlayerHand() {
+        Random random = new Random();
+        Card[] returnThis = new Card[10];
+        int handCount = 0;
+
+        while (handCount < 10) {
+            int getThisCard = random.nextInt(52);
+            if (this.startingDeck[getThisCard] != null) {
+                returnThis[handCount] = startingDeck[getThisCard];
+                this.startingDeck[getThisCard]=null;
+                handCount++;
+            }
+        }
+        return returnThis;
+    }
+
+    public Card createDiscardPile() {
+        Card returnMe = null;
+        Random random = new Random();
+
+        while (returnMe == null) {
+            int getThisCard = random.nextInt(52);
+            if (this.startingDeck[getThisCard] != null) {
+                returnMe = startingDeck[getThisCard];
+                startingDeck[getThisCard] = null;
+            }
+        }
+
+        return returnMe;
+    }
+
+    public Card[] createDrawPile() {
+        Random random = new Random();
+        Card[] returnThis = new Card[31];
+        int pileAmount = 0;
+
+        int getThisCard = random.nextInt(52);
+        while (pileAmount < 31) {
+            if (this.startingDeck[getThisCard] != null) {
+                returnThis[pileAmount] = this.startingDeck[getThisCard];
+                this.startingDeck[getThisCard] = null;
+                pileAmount++;
+            }
+        }
+
+        return returnThis;
+    }
+
+    //These methods can only be taken in the drawing stage//
+    public boolean drawFromDeck() {
+        if (this.currentStage == "drawingStage") {
+            this.currentStage = "playingStage";
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean drawFromDiscard() {
+        if (this.currentStage == "drawingStage") {
+            this.currentStage = "playingStage";
+            return true;
+        } else {
+            return false;
+        }
+    }
+    ////////////////////////////////////////////////////////
+
+    //These methods can only be taken in the drawing stage//
+    public boolean discardCard() {
+        if (this.currentStage == "discardStage") {
+            this.currentStage = "drawStage";
+            return true;
+        } else {
+            return false;
+        }
+    }
+    ////////////////////////////////////////////////////////
+
+    //These methods can only be taken in the playingStage///
+    public boolean autoGin() {
+        if (this.currentStage == "playingStage") {
+            this.currentStage = "endStage";
+            return true;
+        } else {
+            return false;
+        }
+    }
+    ////////////////////////////////////////////////////////
+
+    //These methods can only be taken during the endStage///
+    public boolean matchWithOpponent() {
+        if (this.currentStage == "endStage") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    ////////////////////////////////////////////////////////
+
+    //These actions can be taken at anytime, thus they will always return true;//
+    public boolean quitGame() {
+            this.currentStage = "noStage";
+            return true;
+    }
+
+    public boolean restartGame() {
+            this.currentStage = "drawStage";
+            return true;
+    }
+
+    public boolean giveUp() {
+            this.currentStage = "noPhase";
+            return true;
+    }
+
+    //Player can organize anytime
+    private boolean organizeHand() {
+            return true;
+    }
+
+    public boolean groupCards() {
+            return true;
+    }
+    ////////////////////////////////////////////////////////
 }
