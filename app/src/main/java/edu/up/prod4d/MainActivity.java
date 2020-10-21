@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         EditText editText = findViewById(R.id.EditText);
+        editText.setText("TEST");
+        editText.append("NO");
 
         Button runButton = findViewById(R.id.RunButton);
         runButton.setOnClickListener(this);
@@ -25,8 +27,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         EditText editText = findViewById(R.id.EditText);
-        editText.setText("");
+        editText.append("TEST");
         GameState firstInstance = new GameState();
         GameState secondInstance = new GameState(firstInstance);
+        GameState thirdInstance = new GameState();
+        GameState fourthInstance = new GameState(thirdInstance);
+
+       // editText.getText().append(secondInstance.toString());
+        //editText.getText().append(fourthInstance.toString());
+        //System.out.println(secondInstance.toString());
+        //System.out.println(fourthInstance.toString());
     }
 }
