@@ -17,6 +17,7 @@ public class GameState {
     private int P1Points;
     private int totalofP2;
     private int P2Points;
+    private int amountOfDiscards;
 
     //Similar to a toggle, this will be true for P1 and false for P2.
     private boolean turn;
@@ -38,6 +39,52 @@ public class GameState {
         this.P1Points = 0;
         this.P2Points = 0;
         this.turn = true;
+    }
+
+    //Player methods
+    //Method for drawing a card from draw pile
+    public Card drawDraw(Card[] cardPile) {
+
+        if (!(currentStage == "drawingStage")) {
+            return null;
+        }
+        if (this.amountOfDiscards >= 32) {
+            return null;
+        }
+
+        Random random = new Random();
+        int chosenCard;
+        if(!(cardPile.equals(this.drawPile))) { //Just to make sure this isn't called on something else.
+            return null;
+        } else {
+            while (true) { //repeat until it has returned a card.
+                chosenCard = random.nextInt(cardPile.length);
+                if (cardPile[chosenCard] != null) {
+                    Card returnThis = new Card(cardPile[chosenCard].getNumber(), cardPile[chosenCard].getSuit());
+                    cardPile[chosenCard] = null;
+                    return returnThis;
+                }
+            }
+        }
+
+    }
+    //Method for drawing the discarded card
+    public Card drawDiscard() {
+        if (currentStage == "drawingStage") {
+            return this.discardedCard;
+        } else {
+            return null;
+        }
+    }
+
+    public void discardCard(Card[] cardPile, int toRemove) {
+        if (this.currentStage == "discardStage") {
+            cardPile[toRemove] = null;
+            for (int i = toRemove; i < cardPile.length-1; i++) {
+                cardPile[toRemove] = cardPile[toRemove+1];
+            }
+            cardPile[cardPile.length-1] = null;
+        }
     }
 
     //Deep Copy Constructor
@@ -163,7 +210,7 @@ public class GameState {
 
     public Card[] createPlayerHand() {
         Random random = new Random();
-        Card[] returnThis = new Card[10];
+        Card[] returnThis = new Card[11];
         int handCount = 0;
 
         while (handCount < 10) {
@@ -197,8 +244,8 @@ public class GameState {
         Card[] returnThis = new Card[31];
         int pileAmount = 0;
 
-        int getThisCard = random.nextInt(52);
-        while (pileAmount < 31) {
+        while (pileAmount < 32) {
+            int getThisCard = random.nextInt(52);
             if (this.startingDeck[getThisCard] != null) {
                 returnThis[pileAmount] = this.startingDeck[getThisCard];
                 this.startingDeck[getThisCard] = null;
@@ -227,12 +274,10 @@ public class GameState {
             return false;
         }
     }
-    ////////////////////////////////////////////////////////
 
-    //These methods can only be taken in the drawing stage//
-    public boolean discardCard() {
-        if (this.currentStage == "discardStage") {
-            this.currentStage = "drawStage";
+    public boolean autoGin() {
+        if (this.currentStage == "drawingStage") {
+            this.currentStage = "endStage";
             return true;
         } else {
             return false;
@@ -240,10 +285,10 @@ public class GameState {
     }
     ////////////////////////////////////////////////////////
 
-    //These methods can only be taken in the playingStage///
-    public boolean autoGin() {
-        if (this.currentStage == "playingStage") {
-            this.currentStage = "endStage";
+    //These methods can only be taken in the discard stage//
+    public boolean discardCard() {
+        if (this.currentStage == "discardStage") {
+            this.currentStage = "drawingStage";
             return true;
         } else {
             return false;
@@ -268,7 +313,7 @@ public class GameState {
     }
 
     public boolean restartGame() {
-            this.currentStage = "drawStage";
+            this.currentStage = "drawingStage";
             return true;
     }
 
@@ -278,7 +323,7 @@ public class GameState {
     }
 
     //Player can organize anytime
-    private boolean organizeHand() {
+    public boolean organizeHand() {
             return true;
     }
 
