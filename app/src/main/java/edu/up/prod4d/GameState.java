@@ -114,6 +114,7 @@ public class GameState {
         this.P1Points = gameState.P1Points;
         this.P2Points = gameState.P2Points;
         this.turn = gameState.turn;
+        this.currentStage = gameState.currentStage;
         this.amountOfDiscards = gameState.amountOfDiscards;
     }
 
