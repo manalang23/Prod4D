@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditText editText = findViewById(R.id.EditText);
         editText.setText("");
         GameState firstInstance = new GameState();
-        //GameState secondInstance = new GameState(firstInstance);
+        GameState secondInstance = new GameState(firstInstance);
 
         //Draw from deck
         if(firstInstance.drawFromDeck()) {
@@ -114,9 +114,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         GameState thirdInstance = new GameState();
-        //GameState fourthInstance = new GameState(thirdInstance);
+        GameState fourthInstance = new GameState(thirdInstance);
 
-       // editText.getText().append(secondInstance.toString());
+        // editText.getText().append(secondInstance.toString());
         //editText.getText().append(fourthInstance.toString());
         //System.out.println(secondInstance.toString());
         //System.out.println(fourthInstance.toString());

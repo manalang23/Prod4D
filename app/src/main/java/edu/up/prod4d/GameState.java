@@ -90,17 +90,20 @@ public class GameState {
 
     //Deep Copy Constructor
     public GameState (GameState gameState) {
-        if (turn) {
-            for (int i = 0; i < gameState.player1Cards.length; i++) {
+        if (gameState.turn) {
+            this.player1Cards = new Card[11];
+            for (int i = 0; i < gameState.player1Cards.length-1; i++) {
                 this.player1Cards[i] = new Card(gameState.player1Cards[i].getNumber(), gameState.player1Cards[i].getSuit());
             }
         } else {
-            for (int i = 0; i < gameState.player1Cards.length; i++) {
+            this.player2Cards = new Card[11];
+            for (int i = 0; i < gameState.player1Cards.length-1; i++) {
                 this.player2Cards[i] = new Card(gameState.player2Cards[i].getNumber(), gameState.player2Cards[i].getSuit());
             }
         }
 
-        for (int i = 0; i < gameState.drawPile.length; i++) {
+        this.drawPile = new Card[32]; // Could be 31
+        for (int i = 0; i < gameState.drawPile.length-1; i++) {
             this.drawPile[i] = new Card(gameState.drawPile[i].getNumber(), gameState.drawPile[i].getSuit());
         }
 
