@@ -46,7 +46,7 @@ public class GameState {
     //Method for drawing a card from draw pile
     public Card drawDraw() {
 
-        if (this.currentStage != "drawingStage") {
+        if (this.currentStage != "discardStage") {
             return null;
         }
         if (this.amountOfDiscards >= 32) {

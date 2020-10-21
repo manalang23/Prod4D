@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(firstInstance.drawFromDeck()) {
             Card writeThis = firstInstance.drawDraw();
             if(writeThis != null) {
-                editText.getText().append("Player 1 drew  ");
-                editText.getText().append(writeThis.getNumber() + " of " + writeThis.getSuit() + "from the draw pile. ");
+                editText.getText().append("Player 1 drew ");
+                editText.getText().append(writeThis.getNumber() + " of " + writeThis.getSuit() + " from the draw pile. ");
             } else {
                 editText.getText().append("Player 1 tried to draw from draw pile but couldn't. ");
             }
