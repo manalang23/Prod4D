@@ -34,6 +34,7 @@ public class GameState {
 
         this.currentStage = "endPhase";
 
+        this.amountOfDiscards = 0;
         this.totalOfP1 = 0;
         this.totalofP2 = 0;
         this.P1Points = 0;
@@ -45,7 +46,7 @@ public class GameState {
     //Method for drawing a card from draw pile
     public Card drawDraw(Card[] cardPile) {
 
-        if (!(currentStage == "drawingStage")) {
+        if (currentStage != "drawingStage") {
             return null;
         }
         if (this.amountOfDiscards >= 32) {
@@ -79,11 +80,12 @@ public class GameState {
 
     public void discardCard(Card[] cardPile, int toRemove) {
         if (this.currentStage == "discardStage") {
+            this.discardedCard = cardPile[toRemove];
             cardPile[toRemove] = null;
-            for (int i = toRemove; i < cardPile.length-1; i++) {
+            for (int i = toRemove; i < 11; i++) {
                 cardPile[toRemove] = cardPile[toRemove+1];
             }
-            cardPile[cardPile.length-1] = null;
+            cardPile[11] = null; // sets last card to null after sorting
         }
     }
 
@@ -110,6 +112,7 @@ public class GameState {
         this.P1Points = gameState.P1Points;
         this.P2Points = gameState.P2Points;
         this.turn = gameState.turn;
+        this.amountOfDiscards = gameState.amountOfDiscards;
     }
 
     //Our String methods
