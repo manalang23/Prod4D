@@ -120,17 +120,21 @@ public class GameState {
     //Our String methods
     public String writeHand(Card[] cardSet) {
         String returnThis = "";
-        for (int i = 0 ; i < cardSet.length; i++) {
-            returnThis = returnThis + cardSet[i];
+        for (int i = 0 ; i < cardSet.length-1; i++) {
+            returnThis = returnThis + cardSet[i].getNumber() + " of " + cardSet[i].getSuit() + ", ";
         }
 
         return returnThis;
     }
 
+    public String getCurrentStage() {
+        return this.currentStage;
+    }
+
     //@Override
     public String toString(GameState gameState) {
         String returnThis;
-        returnThis = "Current phase : " + gameState.currentStage + "\n";
+        returnThis = "Current phase : " + gameState.getCurrentStage() + "\n";
         //If array.toString doesn't work, this will be a for loop that goes through the array and writes it out.
         returnThis = returnThis + "Current points for both players are, from P1 to P2 : " + gameState.P1Points + "," + gameState.P2Points + "\n";
         if (turn) {
@@ -231,11 +235,11 @@ public class GameState {
 
     public Card createDiscardPile() {
 
-        Random random = new Random();
+        //Random random = new Random();
 
-        int getThisCard = random.nextInt(32);
-        Card returnMe = new Card(this.drawPile[getThisCard].getNumber(), this.drawPile[getThisCard].getSuit());
-        this.drawPile[getThisCard] = null;
+        //int getThisCard = random.nextInt(32);
+        Card returnMe = new Card(this.drawPile[31].getNumber(), this.drawPile[31].getSuit());
+        this.drawPile[31] = null;
         this.amountOfDiscards++;
 
         return returnMe;
