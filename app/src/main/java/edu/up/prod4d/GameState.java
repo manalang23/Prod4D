@@ -32,7 +32,7 @@ public class GameState {
         this.drawPile = createDrawPile();
         this.discardedCard = createDiscardPile();
 
-        this.currentStage = "endPhase";
+        this.currentStage = "drawingStage";
 
         this.amountOfDiscards = 0;
         this.totalOfP1 = 0;
@@ -44,9 +44,9 @@ public class GameState {
 
     //Player methods
     //Method for drawing a card from draw pile
-    public Card drawDraw(Card[] cardPile) {
+    public Card drawDraw() {
 
-        if (currentStage != "drawingStage") {
+        if (this.currentStage != "drawingStage") {
             return null;
         }
         if (this.amountOfDiscards >= 32) {
@@ -55,23 +55,22 @@ public class GameState {
 
         Random random = new Random();
         int chosenCard;
-        if(!(cardPile.equals(this.drawPile))) { //Just to make sure this isn't called on something else.
-            return null;
-        } else {
-            while (true) { //repeat until it has returned a card.
-                chosenCard = random.nextInt(cardPile.length);
-                if (cardPile[chosenCard] != null) {
-                    Card returnThis = new Card(cardPile[chosenCard].getNumber(), cardPile[chosenCard].getSuit());
-                    cardPile[chosenCard] = null;
+
+
+        while (true) { //repeat until it has returned a card.
+            chosenCard = random.nextInt(this.drawPile.length);
+            if (this.drawPile[chosenCard] != null) {
+                    Card returnThis = new Card(this.drawPile[chosenCard].getNumber(), this.drawPile[chosenCard].getSuit());
+                this.drawPile[chosenCard] = null;
                     return returnThis;
                 }
             }
-        }
+
 
     }
     //Method for drawing the discarded card
     public Card drawDiscard() {
-        if (currentStage == "drawingStage") {
+        if (this.currentStage == "drawingStage") {
             return this.discardedCard;
         } else {
             return null;
@@ -228,23 +227,20 @@ public class GameState {
     }
 
     public Card createDiscardPile() {
-        Card returnMe = null;
+
         Random random = new Random();
 
-        while (returnMe == null) {
-            int getThisCard = random.nextInt(52);
-            if (this.startingDeck[getThisCard] != null) {
-                returnMe = startingDeck[getThisCard];
-                startingDeck[getThisCard] = null;
-            }
-        }
+        int getThisCard = random.nextInt(32);
+        Card returnMe = new Card(this.drawPile[getThisCard].getNumber(), this.drawPile[getThisCard].getSuit());
+        this.drawPile[getThisCard] = null;
+        this.amountOfDiscards++;
 
         return returnMe;
     }
 
     public Card[] createDrawPile() {
         Random random = new Random();
-        Card[] returnThis = new Card[31];
+        Card[] returnThis = new Card[32];
         int pileAmount = 0;
 
         while (pileAmount < 32) {
@@ -262,7 +258,7 @@ public class GameState {
     //These methods can only be taken in the drawing stage//
     public boolean drawFromDeck() {
         if (this.currentStage == "drawingStage") {
-            this.currentStage = "playingStage";
+            this.currentStage = "discardStage";
             return true;
         } else {
             return false;
@@ -271,7 +267,7 @@ public class GameState {
 
     public boolean drawFromDiscard() {
         if (this.currentStage == "drawingStage") {
-            this.currentStage = "playingStage";
+            this.currentStage = "discardStage";
             return true;
         } else {
             return false;
@@ -311,27 +307,42 @@ public class GameState {
 
     //These actions can be taken at anytime, thus they will always return true;//
     public boolean quitGame() {
+        if (this.currentStage == "drawingStage" || this.currentStage == "discardStage" || this.currentStage == "endStage") {
             this.currentStage = "noStage";
             return true;
+        }
+        return false;
     }
 
     public boolean restartGame() {
+        if (this.currentStage == "drawingStage" || this.currentStage == "discardStage" || this.currentStage == "endStage") {
             this.currentStage = "drawingStage";
             return true;
+        }
+        return false;
     }
 
     public boolean giveUp() {
+        if (this.currentStage == "drawingStage" || this.currentStage == "discardStage" || this.currentStage == "endStage") {
             this.currentStage = "noPhase";
             return true;
+        }
+        return false;
     }
 
     //Player can organize anytime
     public boolean organizeHand() {
+        if (this.currentStage == "drawingStage" || this.currentStage == "discardStage" || this.currentStage == "endStage") {
             return true;
+        }
+        return false;
     }
 
     public boolean groupCards() {
+        if (this.currentStage == "drawingStage" || this.currentStage == "discardStage" || this.currentStage == "endStage") {
             return true;
+        }
+        return false;
     }
     ////////////////////////////////////////////////////////
 }
