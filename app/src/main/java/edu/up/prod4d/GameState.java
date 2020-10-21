@@ -39,6 +39,32 @@ public class GameState {
         this.currentPhase = null;
     }
 
+    //Deep Copy Constructor
+    public GameState (GameState gameState) {
+        if (turn) {
+            for (int i = 0; i < gameState.player1Cards.length; i++) {
+                this.player1Cards[i] = new Card(gameState.player1Cards[i].getNumber(), gameState.player1Cards[i].getSuit());
+            }
+        } else {
+            for (int i = 0; i < gameState.player1Cards.length; i++) {
+                this.player2Cards[i] = new Card(gameState.player2Cards[i].getNumber(), gameState.player2Cards[i].getSuit());
+            }
+        }
+
+        for (int i = 0; i < gameState.drawPile.length; i++) {
+            this.drawPile[i] = new Card(gameState.drawPile[i].getNumber(), gameState.drawPile[i].getSuit());
+        }
+
+        this.discardedCard = new Card(gameState.discardedCard.getNumber(), gameState.discardedCard.getSuit());
+        this.totalOfP1 = totalOfP1;
+        this.P1Points = P1Points;
+        this.P2Points = P2Points;
+        this.turn = turn;
+        this.currentPhase = currentPhase;
+    }
+
+    }
+
     public Card[] createPlayerHand() {
         Random random = new Random();
         Card[] returnThis = new Card[10];
@@ -87,44 +113,32 @@ public class GameState {
         return returnThis;
     }
 
-    public GameState (GameState gameState) {
-        if (turn) {
-            this.player1Cards = player1Cards;
-            this.drawPile = drawPile;
-            this.discardedCard = discardedCard;
-            this.totalOfP1 = totalOfP1;
-            this.P1Points = P1Points;
-            this.P2Points = P2Points;
-            this.turn = turn;
-            this.currentPhase = currentPhase;
-        } else {
-            this.player2Cards = player2Cards;
-            this.drawPile = drawPile;
-            this.discardedCard = discardedCard;
-            this.totalofP2 = totalofP2;
-            this.P1Points = P1Points;
-            this.P2Points = P2Points;
-            this.turn = turn;
-            this.currentPhase = currentPhase;
+    public String writeHand(Card[] cardSet) {
+        String returnThis = "";
+        for (int i = 0 ; i < cardSet.length; i++) {
+            returnThis = returnThis + cardSet[i];
         }
+
+        return returnThis;
     }
 
+    //@Override
     public String toString(GameState gameState) {
         String returnThis;
-        returnThis = "Current phase : " + GameState.currentPhase + "\n";
+        returnThis = "Current phase : " + gameState.currentPhase + "\n";
         //If array.toString doesn't work, this will be a for loop that goes through the array and writes it out.
-        returnThis = returnThis + "Current points for both players are, from P1 to P2 : " + GameState.P1Points + "," + GameState.P2Points + "\n";
+        returnThis = returnThis + "Current points for both players are, from P1 to P2 : " + gameState.P1Points + "," + gameState.P2Points + "\n";
         if (turn) {
             returnThis = returnThis + "Current player is Player 1 \n";
-            returnThis = returnThis + "Your cards are : " + GameState.player1Cards.toString() + "\n";
-            returnThis = returnThis + "Your hand value is : " + GameState.totalofP1 + "\n";
+            returnThis = returnThis + "Your cards are : " + writeHand(gameState.player1Cards) + "\n";
+            returnThis = returnThis + "Your hand value is : " + gameState.totalOfP1 + "\n";
         } else {
             returnThis = returnThis + "Current player is Player 2 \n";
-            returnThis = returnThis + "Your cards are : " + GameState.player2Cards.toString() + "\n";
-            returnThis = returnThis + "Your hand value is : " + GameState.totalofP2 + "\n";
+            returnThis = returnThis + "Your cards are : " + writeHand(gameState.player2Cards) + "\n";
+            returnThis = returnThis + "Your hand value is : " + gameState.totalofP2 + "\n";
         }
 
-
+        return returnThis;
     }
 
     public Card[] createStartingDeck() {
