@@ -8,23 +8,22 @@ import java.util.Hashtable;
 import java.util.Random;
 
 public class GameState {
-    private static String totalofP1;
     private Card[] startingDeck;
-    private static Card[] player1Cards;
-    private static Card[] player2Cards;
+    private Card[] player1Cards;
+    private Card[] player2Cards;
     private Card[] drawPile;
     private Card discardedCard;
 
     //Depending on which player, the current total of hand will display.
     private int totalOfP1;
-    private static int P1Points;
-    private static int totalofP2;
-    private static int P2Points;
+    private int P1Points;
+    private int totalofP2;
+    private int P2Points;
 
     //Similar to a toggle, this will be true for P1 and false for P2.
     private boolean turn;
 
-    private static Stage currentPhase;
+    private Stage currentPhase;
 
     public GameState () {
         this.startingDeck = createStartingDeck();
@@ -40,65 +39,95 @@ public class GameState {
         this.currentPhase = null;
     }
 
-    public GameState (GameState gameState) {
-        if (turn) {
-            this.startingDeck = gameState.startingDeck;
-            this.player1Cards = gameState.player1Cards;
-            this.player2Cards = null;
-            this.drawPile = gameState.drawPile;
-            this.discardedCard = gameState.discardedCard;
-            this.totalOfP1 = gameState.totalOfP1;
-            this.totalofP2 = 0;
-            this.P1Points = gameState.P1Points;
-            this.P2Points = gameState.P2Points;
-            this.turn = gameState.turn;
-            this.currentPhase = gameState.currentPhase;
-        } else {
-            this.startingDeck = gameState.startingDeck;
-            this.player1Cards = null;
-            this.player2Cards = gameState.player2Cards;
-            this.drawPile = gameState.drawPile;
-            this.discardedCard = gameState.discardedCard;
-            this.totalofP2 = gameState.totalofP2;
-            this.P1Points = 0;
-            this.P2Points = gameState.P2Points;
-            this.turn = gameState.turn;
-            this.currentPhase = gameState.currentPhase;
-        }
-    }
-    // this method writes out whatever is in the players hands
-     public String writeHand(Card[] cardSet){
-        String returnThis = "";
-        for(int i=0; i<cardSet.length; i++){
-            returnThis= returnThis + cardSet[i];
+    public Card[] createPlayerHand() {
+        Random random = new Random();
+        Card[] returnThis = new Card[10];
+        int handCount = 0;
+
+        while (handCount < 10) {
+            int getThisCard = random.nextInt(52);
+            if (this.startingDeck[getThisCard] != null) {
+                returnThis[handCount] = startingDeck[getThisCard];
+                this.startingDeck[getThisCard]=null;
+                handCount++;
+            }
         }
         return returnThis;
-     }
-     // this is out toString method
-         @Override
-         public String toString (GameState gameState){
-             String returnThis;
-             returnThis = "Current phase : " + GameState.currentPhase + "\n";
-             //If array.toString doesn't work, this will be a for loop that goes through
-             // the array and writes it out.
-             returnThis = returnThis + "Current points for both players are, from P1 to P2 : " +
-                     GameState.P1Points + "," + GameState.P2Points + "\n";
-             if (turn) {
-                 returnThis = returnThis + "Current player is Player 1 \n";
-                 returnThis = returnThis + "Your cards are : " + writeHand(GameState.player1Cards) + "\n";
-                 returnThis = returnThis + "Your hand value is : " + GameState.totalofP1 + "\n";
-             } else {
-                 returnThis = returnThis + "Current player is Player 2 \n";
-                 returnThis = returnThis + "Your cards are : " + writeHand(GameState.player2Cards) + "\n";
-                 returnThis = returnThis + "Your hand value is : " + GameState.totalofP2 + "\n";
-             }
-             return returnThis;
+    }
 
-         }
+    public Card createDiscardPile() {
+        Card returnMe = null;
+        Random random = new Random();
 
+        while (returnMe == null) {
+            int getThisCard = random.nextInt(52);
+            if (this.startingDeck[getThisCard] != null) {
+                returnMe = startingDeck[getThisCard];
+                startingDeck[getThisCard] = null;
+            }
+        }
+
+        return returnMe;
+    }
+
+    public Card[] createDrawPile() {
+        Random random = new Random();
+        Card[] returnThis = new Card[31];
+        int pileAmount = 0;
+
+        int getThisCard = random.nextInt(52);
+        while (pileAmount < 31) {
+            if (this.startingDeck[getThisCard] != null) {
+                returnThis[pileAmount] = this.startingDeck[getThisCard];
+                this.startingDeck[getThisCard] = null;
+                pileAmount++;
+            }
+        }
+
+        return returnThis;
+    }
+
+    public GameState (GameState gameState) {
+        if (turn) {
+            this.player1Cards = player1Cards;
+            this.drawPile = drawPile;
+            this.discardedCard = discardedCard;
+            this.totalOfP1 = totalOfP1;
+            this.P1Points = P1Points;
+            this.P2Points = P2Points;
+            this.turn = turn;
+            this.currentPhase = currentPhase;
+        } else {
+            this.player2Cards = player2Cards;
+            this.drawPile = drawPile;
+            this.discardedCard = discardedCard;
+            this.totalofP2 = totalofP2;
+            this.P1Points = P1Points;
+            this.P2Points = P2Points;
+            this.turn = turn;
+            this.currentPhase = currentPhase;
+        }
+    }
+
+    public String toString(GameState gameState) {
+        String returnThis;
+        returnThis = "Current phase : " + GameState.currentPhase + "\n";
+        //If array.toString doesn't work, this will be a for loop that goes through the array and writes it out.
+        returnThis = returnThis + "Current points for both players are, from P1 to P2 : " + GameState.P1Points + "," + GameState.P2Points + "\n";
+        if (turn) {
+            returnThis = returnThis + "Current player is Player 1 \n";
+            returnThis = returnThis + "Your cards are : " + GameState.player1Cards.toString() + "\n";
+            returnThis = returnThis + "Your hand value is : " + GameState.totalofP1 + "\n";
+        } else {
+            returnThis = returnThis + "Current player is Player 2 \n";
+            returnThis = returnThis + "Your cards are : " + GameState.player2Cards.toString() + "\n";
+            returnThis = returnThis + "Your hand value is : " + GameState.totalofP2 + "\n";
+        }
+
+
+    }
 
     public Card[] createStartingDeck() {
-        Card[] startingDeck = new Card[52];
         //Hearts
         startingDeck[0] = new Card(1, "Hearts");
         startingDeck[1] = new Card(2, "Hearts");
@@ -158,55 +187,5 @@ public class GameState {
         startingDeck[49] = new Card(11, "Clubs");
         startingDeck[50] = new Card(12, "Clubs");
         startingDeck[51] = new Card(13, "Clubs");
-
-        return startingDeck;
-    }
-
-    public Card[] createPlayerHand() {
-        Random random = new Random();
-        Card[] returnThis = new Card[10];
-        int handCount = 0;
-
-        while (handCount < 10) {
-            int getThisCard = random.nextInt(52);
-            if (this.startingDeck[getThisCard] != null) {
-                returnThis[handCount] = startingDeck[getThisCard];
-                this.startingDeck[getThisCard]=null;
-                handCount++;
-            }
-        }
-        return returnThis;
-    }
-
-    public Card createDiscardPile() {
-        Card returnMe = null;
-        Random random = new Random();
-
-        while (returnMe == null) {
-            int getThisCard = random.nextInt(52);
-            if (this.startingDeck[getThisCard] != null) {
-                returnMe = startingDeck[getThisCard];
-                startingDeck[getThisCard] = null;
-            }
-        }
-
-        return returnMe;
-    }
-
-    public Card[] createDrawPile() {
-        Random random = new Random();
-        Card[] returnThis = new Card[31];
-        int pileAmount = 0;
-
-        int getThisCard = random.nextInt(52);
-        while (pileAmount < 31) {
-            if (this.startingDeck[getThisCard] != null) {
-                returnThis[pileAmount] = this.startingDeck[getThisCard];
-                this.startingDeck[getThisCard] = null;
-                pileAmount++;
-            }
-        }
-
-        return returnThis;
     }
 }
